@@ -1,26 +1,22 @@
 
 procedure foo() return integer {
 	var a: integer;
-	while(true) {
+	while(null) {
+		var b : boolean;
 		a = 0;
 	}
 	return a; 
 }
 
 
-procedure Main() return integer { 
-	
-	var x: integer;
-	var h: integer;
-	var l: intptr; 
-	var f: string[1];
-	if (true) {
-		var y: integer;
-	}
-	h = |f| - 3;
-	x = Main();
-	l = null;
-	x = 5 + 6 - x;
 
-	return 0; 
+procedure Main() return integer {
+	procedure Main() return integer {
+		var x : integer;
+		x = Main();
+		return 0;
+	}
+	var z : integer;
+	return 0;
 }
+

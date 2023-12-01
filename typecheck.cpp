@@ -191,20 +191,23 @@ class Typecheck : public Visitor
     void check_for_one_main(ProgramImpl* p) {
         Attribute main_attr;
         if (!m_st->lookup("Main")) {
+            //  if (m_st->lexical_distance(m_st->get_scope(), p->m_attribute.m_scope) == 0) {
+            //      cout << m_st->lexical_distance(m_st->get_scope(), p->m_attribute.m_scope);
+            //     t_error(no_main, main_attr);
+            //  }
             t_error(no_main, main_attr);
         } else if (!m_st->lookup("Main")->m_arg_type.empty()) {
             t_error(nonvoid_main, main_attr);
         }
     }
 
-    // Create a symbol for the procedure and check there is none already
-    // existing
-    void add_proc_symbol(ProcImpl* p)
-    {
+
+    void add_proc_symbol(ProcImpl* p) {
         char* name = strdup(p->m_symname->spelling());
         Symbol* s = new Symbol();
         s->m_basetype = bt_procedure;
 
+        // Populate argument types
         for (auto& declPtr : *(p->m_decl_list)) {
             DeclImpl* decl = dynamic_cast<DeclImpl*>(declPtr);
             if (decl) {  
@@ -213,19 +216,21 @@ class Typecheck : public Visitor
             }
         }
 
-        if (m_st->exist(name)) {
-            // cout << "Procedure " << name << " already exists in the current scope." << endl;
+        // Check if the name exists in the current scope only
+        if (p->m_attribute.m_scope != nullptr && m_st->lookup(p->m_attribute.m_scope, name) == nullptr) {
             free(name);
             t_error(dup_proc_name, p->m_attribute);
+            return;
         }
 
-        if (!m_st->insert(name, s)) {
+        if(!m_st->insert(name, s)) {
             free(name);
-            t_error(dup_proc_name, p->m_attribute);
-        } else {
-            // cout << "Procedure " << name << " added to scope " << m_st->get_scope() << endl;
+            this->t_error(dup_proc_name, p->m_attribute);
         }
+
+        p->m_attribute.m_basetype = bt_procedure;
     }
+
 
     // Add symbol table information for all the declarations following
     void add_decl_symbol(DeclImpl* p) {
@@ -346,7 +351,7 @@ class Typecheck : public Visitor
     void check_pred_while(Expr* p)
     {
         // Basetype exprType = p->m_attribute.m_basetype;
-        Basetype exprType = evaluate_expr_type(p);
+        Basetype exprType = p->m_attribute.m_basetype;
 
         if (exprType != bt_boolean) {
             t_error(whilepred_err, p->m_attribute); 
@@ -628,8 +633,7 @@ class Typecheck : public Visitor
         add_proc_symbol(p); 
         m_st->open_scope();
         p->visit_children(this);
-        
-
+        p->m_attribute.m_scope = m_st->get_scope();
         // if (p->m_type != nullptr) {
         //     p->m_type->accept(this);
         // }
