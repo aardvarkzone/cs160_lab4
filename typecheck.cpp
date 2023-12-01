@@ -207,7 +207,6 @@ class Typecheck : public Visitor
         Symbol* s = new Symbol();
         s->m_basetype = bt_procedure;
 
-        // Populate argument types
         for (auto& declPtr : *(p->m_decl_list)) {
             DeclImpl* decl = dynamic_cast<DeclImpl*>(declPtr);
             if (decl) {  
@@ -216,7 +215,6 @@ class Typecheck : public Visitor
             }
         }
 
-        // Check if the name exists in the current scope only
         if (p->m_attribute.m_scope != nullptr && m_st->lookup(p->m_attribute.m_scope, name) == nullptr) {
             free(name);
             t_error(dup_proc_name, p->m_attribute);
@@ -277,13 +275,14 @@ class Typecheck : public Visitor
         Procedure_blockImpl* procBlock = dynamic_cast<Procedure_blockImpl*>(p->m_procedure_block);
         if (procBlock != nullptr && procBlock->m_return_stat != nullptr) {
             Return* returnStmt = dynamic_cast<Return*>(procBlock->m_return_stat);
-                if (returnStmt != nullptr && returnStmt->m_expr != nullptr) {
-                    Basetype returnExprType = evaluate_expr_type(returnStmt->m_expr);
-                    if (returnExprType != procDeclaredReturnType) {
-                        t_error(ret_type_mismatch, p->m_attribute);
-                    }
-                } 
-            }
+            if (returnStmt != nullptr && returnStmt->m_expr != nullptr) {
+                Basetype returnExprType = evaluate_expr_type(returnStmt->m_expr);
+                if(returnExprType == bt_ptr && (procDeclaredReturnType == bt_charptr || procDeclaredReturnType == bt_intptr)) {
+                } else if (procDeclaredReturnType != returnExprType) {
+                    t_error(ret_type_mismatch, p->m_attribute);
+                }
+            } 
+        }
         m_st->dump(stdout);
     }
 
@@ -324,11 +323,14 @@ class Typecheck : public Visitor
             Basetype argType = evaluate_expr_type(*argIterator);
             // cout << "Arg " << (i+1) << ": Expected type: " << procSymbol->m_arg_type[i]
                 // << ", Found type: " << argType << endl;
-
+            if (argType == bt_ptr && procSymbol->m_arg_type[i] == bt_charptr) { cout << "test"; }
             if (argType != procSymbol->m_arg_type[i]) {
-                t_error(arg_type_mismatch, p->m_attribute);
-                free(name);
-                return;
+               
+                
+                    t_error(arg_type_mismatch, p->m_attribute);
+                    free(name);
+                    return;
+                
             }
         }
 
@@ -384,11 +386,14 @@ class Typecheck : public Visitor
 
 
     void check_string_assignment(StringAssignment* p) {
-        Expr* lhsExpr = convert_lhs_to_expr(p->m_lhs);
-        Basetype lhsType = evaluate_expr_type(lhsExpr);
+        // Expr* lhsExpr = convert_lhs_to_expr(p->m_lhs);
+        // Basetype lhsType = evaluate_expr_type(lhsExpr);
 
-        if (lhsType != bt_string && lhsType != bt_charptr) {
-            t_error(incompat_assign, p->m_lhs->m_attribute);
+        // if (lhsType != bt_string && lhsType != bt_charptr) {
+        //     t_error(incompat_assign, p->m_lhs->m_attribute);
+        // }
+        if (p->m_lhs->m_attribute.m_basetype != bt_string) {
+             t_error(incompat_assign, p->m_lhs->m_attribute);
         }
     }
 
@@ -399,10 +404,11 @@ class Typecheck : public Visitor
             t_error(no_array_var, p->m_attribute);
         }
 
-        Basetype indexType = evaluate_expr_type(p->m_expr);
+        Basetype indexType = p->m_expr->m_attribute.m_basetype;
         if (indexType != bt_integer) {
             t_error(array_index_error, p->m_attribute); 
         }
+        p->m_attribute.m_basetype = bt_char;
     }
 
     void check_array_element(ArrayElement* p)
@@ -412,11 +418,11 @@ class Typecheck : public Visitor
             t_error(no_array_var, p->m_attribute); 
         }
 
-        Basetype indexType = evaluate_expr_type(p->m_expr);
+        Basetype indexType = p->m_expr->m_attribute.m_basetype;
         if (indexType != bt_integer) {
             t_error(array_index_error, p->m_attribute); 
         }
-
+        p->m_attribute.m_basetype = bt_char;
         
     }
 
@@ -460,18 +466,7 @@ class Typecheck : public Visitor
         }
 
 
-        // bool isValidPointerArithmetic = (type1 == bt_intptr && type2 == bt_integer) ||
-        //                                 (type2 == bt_intptr && type1 == bt_integer);
-
-        // if (!(isValidPointerArithmetic || (type1 == bt_integer && type2 == bt_integer))) {
-        //      t_error(expr_pointer_arithmetic_err, parent->m_attribute);
-        // }
-
-        // if (isValidPointerArithmetic) {
-        // parent->m_attribute.m_basetype = bt_intptr;
-        // } else {
-        //     parent->m_attribute.m_basetype = bt_integer;
-        // }
+       
     }
     
 
@@ -623,13 +618,13 @@ class Typecheck : public Visitor
     }
 
     void visitProgramImpl(ProgramImpl* p)
-    {
+    {   
         p->visit_children(this);
         check_for_one_main(p);
     }
 
     void visitProcImpl(ProcImpl* p) {
-        
+
         add_proc_symbol(p); 
         m_st->open_scope();
         p->visit_children(this);
