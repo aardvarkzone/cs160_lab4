@@ -1,0 +1,46 @@
+digraph G { page="8.5,11"; size="7.5, 10"; 
+"0" -> "1"
+"1" [label="ProgramImpl"]
+"1" -> "2"
+"2" [label="ProcImpl"]
+"2" -> "3"
+"3" [label="SymName\n\"foo\""]
+"2" -> "4"
+"4" [label="TInteger"]
+"2" -> "5"
+"5" [label="ProcedureBlockImpl"]
+"5" -> "6"
+"6" [label="Return"]
+"6" -> "7"
+"7" [label="IntLit"]
+"7" -> "8"
+"8" [label="Primitive\n0"]
+"1" -> "9"
+"9" [label="ProcImpl"]
+"9" -> "10"
+"10" [label="SymName\n\"Main\""]
+"9" -> "11"
+"11" [label="TInteger"]
+"9" -> "12"
+"12" [label="ProcedureBlockImpl"]
+"12" -> "13"
+"13" [label="DeclImpl"]
+"13" -> "14"
+"14" [label="SymName\n\"a\""]
+"13" -> "15"
+"15" [label="TInteger"]
+"12" -> "16"
+"16" [label="Call"]
+"16" -> "17"
+"17" [label="Variable"]
+"17" -> "18"
+"18" [label="SymName\n\"a\""]
+"16" -> "19"
+"19" [label="SymName\n\"foo\""]
+"12" -> "20"
+"20" [label="Return"]
+"20" -> "21"
+"21" [label="IntLit"]
+"21" -> "22"
+"22" [label="Primitive\n0"]
+}
