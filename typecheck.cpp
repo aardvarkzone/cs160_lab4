@@ -144,7 +144,6 @@ class Typecheck : public Visitor
             return bt_char;
         } else if (auto boolLit = dynamic_cast<BoolLit*>(expr)) {
             return bt_boolean;
-            cout << "test" << endl;
         }
         if (auto varExpr = dynamic_cast<Ident*>(expr)) {
             Symbol* varSymbol = m_st->lookup(varExpr->m_symname->spelling());
@@ -172,6 +171,14 @@ class Typecheck : public Visitor
             }
             if (auto arrayAccess = dynamic_cast<ArrayAccess*>(lhsExpr)) {
                 return bt_charptr;
+            }
+        }
+        if (auto absExpr = dynamic_cast<AbsoluteValue*>(expr)) {
+            Basetype childType = evaluate_expr_type(absExpr->m_expr);
+            if (childType == bt_integer || childType == bt_string) {
+                return bt_integer;
+            } else {
+                return bt_undef; 
             }
         }
         return bt_undef; 
@@ -338,7 +345,8 @@ class Typecheck : public Visitor
     // For checking that this expressions type is boolean used in while
     void check_pred_while(Expr* p)
     {
-        Basetype exprType = p->m_attribute.m_basetype;
+        // Basetype exprType = p->m_attribute.m_basetype;
+        Basetype exprType = evaluate_expr_type(p);
 
         if (exprType != bt_boolean) {
             t_error(whilepred_err, p->m_attribute); 
@@ -347,10 +355,26 @@ class Typecheck : public Visitor
 
     void check_assignment(Assignment* p) {
        
-        if (p->m_lhs->m_attribute.m_basetype != p->m_expr->m_attribute.m_basetype) {
-            t_error(incompat_assign, p->m_attribute);
+        // if (p->m_lhs->m_attribute.m_basetype != p->m_expr->m_attribute.m_basetype) {
+        //     t_error(incompat_assign, p->m_attribute);
+        // }
+        if (p->m_lhs->m_attribute.m_basetype == p->m_expr->m_attribute.m_basetype) {
+        return;  
+    }
+
+        if (p->m_lhs->m_attribute.m_basetype == bt_string && p->m_expr->m_attribute.m_basetype == bt_char) {
+            if(dynamic_cast<ArrayElement*>(p->m_lhs)) {
+                return; 
+            }
         }
-        
+
+        if (p->m_expr->m_attribute.m_basetype == bt_ptr) {
+            if (p->m_lhs->m_attribute.m_basetype == bt_charptr || p->m_lhs->m_attribute.m_basetype == bt_intptr) {
+                return; 
+            }
+        }
+
+        t_error(incompat_assign, p->m_attribute);
     }
 
 
@@ -403,8 +427,8 @@ class Typecheck : public Visitor
 
     // For checking arithmetic expressions(plus, times, ...)
     void checkset_arithexpr(Expr* parent, Expr* child1, Expr* child2) {
-        Basetype type1 = evaluate_expr_type(child1);
-        Basetype type2 = evaluate_expr_type(child2);
+        Basetype type1 = child1->m_attribute.m_basetype;
+        Basetype type2 = child2->m_attribute.m_basetype;
 
         if (type1 != bt_integer || type2 != bt_integer) {
             t_error(expr_type_err, parent->m_attribute);
@@ -417,17 +441,32 @@ class Typecheck : public Visitor
     // Called by plus and minus: in these cases we allow pointer arithmetics
     void checkset_arithexpr_or_pointer(Expr* parent, Expr* child1, Expr* child2)
     {
-        Basetype type1 = evaluate_expr_type(child1);
-        Basetype type2 = evaluate_expr_type(child2);
+        Basetype type1 = child1->m_attribute.m_basetype;
+        Basetype type2 = child2->m_attribute.m_basetype;
 
-        bool isValidPointerArithmetic = (type1 == bt_intptr && type2 == bt_integer) ||
-                                        (type2 == bt_intptr && type1 == bt_integer);
-
-        if (!(isValidPointerArithmetic || (type1 == bt_integer && type2 == bt_integer))) {
-             t_error(expr_pointer_arithmetic_err, parent->m_attribute);
+        if ((type1 == bt_intptr && type2 == bt_integer) ||  (type2 == bt_intptr && type1 == bt_integer)) {
+            parent->m_attribute.m_basetype = bt_intptr;
+        } else if (type1 == bt_integer && type2 == bt_integer) {
+            parent->m_attribute.m_basetype = bt_integer;
+        } else if ((type1 == bt_charptr && type2 == bt_integer) ||  (type2 == bt_charptr && type1 == bt_integer)) {
+            parent->m_attribute.m_basetype = bt_charptr;
+        } else {
+            t_error(expr_pointer_arithmetic_err, parent->m_attribute);
         }
 
-        parent->m_attribute.m_basetype = (isValidPointerArithmetic) ? bt_intptr : bt_integer;
+
+        // bool isValidPointerArithmetic = (type1 == bt_intptr && type2 == bt_integer) ||
+        //                                 (type2 == bt_intptr && type1 == bt_integer);
+
+        // if (!(isValidPointerArithmetic || (type1 == bt_integer && type2 == bt_integer))) {
+        //      t_error(expr_pointer_arithmetic_err, parent->m_attribute);
+        // }
+
+        // if (isValidPointerArithmetic) {
+        // parent->m_attribute.m_basetype = bt_intptr;
+        // } else {
+        //     parent->m_attribute.m_basetype = bt_integer;
+        // }
     }
     
 
@@ -487,25 +526,25 @@ class Typecheck : public Visitor
     }
 
     void checkset_absolute_value(Expr* parent, Expr* child) {
-        Basetype childType = evaluate_expr_type(child);
+        Basetype childType = child->m_attribute.m_basetype;
 
         
-        if (childType != bt_integer) {
+        if (childType != bt_integer && childType != bt_string) {
             t_error(expr_type_err, parent->m_attribute); 
         }
 
-        parent->m_attribute.m_basetype = childType;
+        parent->m_attribute.m_basetype = bt_integer;
     }
 
 
     void checkset_addressof(Expr* parent, Lhs* child) {
         // parent->m_attribute.m_basetype = bt_ptr;
         if (auto var = dynamic_cast<Variable*>(child)) {
-            Symbol* varSymbol = m_st->lookup(var->m_symname->spelling());
-            if (varSymbol) {
-                if (varSymbol->m_basetype == bt_integer) {
+            Symbol* s = m_st->lookup(var->m_symname->spelling());
+            if (s) {
+                if (s->m_basetype == bt_integer) {
                     parent->m_attribute.m_basetype = bt_intptr;
-                } else if (varSymbol->m_basetype == bt_char) {
+                } else if (s->m_basetype == bt_char) {
                     parent->m_attribute.m_basetype = bt_charptr;
                 } else {
                     t_error(expr_addressof_error, child->m_attribute);
@@ -528,7 +567,7 @@ class Typecheck : public Visitor
     {
         Basetype childType = evaluate_expr_type(child);
 
-        if (childType != bt_ptr && childType != bt_charptr && childType != bt_intptr) {
+        if (childType != bt_charptr && childType != bt_intptr) {
             t_error(invalid_deref, parent->m_attribute);
         }
 
@@ -550,14 +589,13 @@ class Typecheck : public Visitor
 
         if (s->m_basetype != bt_intptr && s->m_basetype != bt_charptr) {
             t_error(invalid_deref, p->m_attribute);
-            return;
         }
 
         if (s->m_basetype == bt_intptr) {
             p->m_attribute.m_basetype = bt_integer;
         } else if (s->m_basetype == bt_charptr) {
             p->m_attribute.m_basetype = bt_char;
-        }
+        } 
     }
 
     void checkset_variable(Variable* p)
@@ -592,9 +630,9 @@ class Typecheck : public Visitor
         p->visit_children(this);
         
 
-        if (p->m_type != nullptr) {
-            p->m_type->accept(this);
-        }
+        // if (p->m_type != nullptr) {
+        //     p->m_type->accept(this);
+        // }
         check_proc(p);
         m_st->close_scope();
     }
@@ -694,10 +732,8 @@ class Typecheck : public Visitor
     {
         p->m_expr->accept(this);
 
-        // Now, check the type of the predicate
         check_pred_while(p->m_expr);
 
-        // Then, visit the body of the while loop
         p->m_nested_block->accept(this);
     }
 
