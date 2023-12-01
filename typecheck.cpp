@@ -209,10 +209,11 @@ class Typecheck : public Visitor
         if (m_st->exist(name)) {
             // cout << "Procedure " << name << " already exists in the current scope." << endl;
             free(name);
-            return;
+            t_error(dup_proc_name, p->m_attribute);
         }
 
         if (!m_st->insert(name, s)) {
+            free(name);
             t_error(dup_proc_name, p->m_attribute);
         } else {
             // cout << "Procedure " << name << " added to scope " << m_st->get_scope() << endl;
@@ -486,7 +487,8 @@ class Typecheck : public Visitor
     }
 
     void checkset_absolute_value(Expr* parent, Expr* child) {
-        Basetype childType = child->m_attribute.m_basetype;
+        Basetype childType = evaluate_expr_type(child);
+
         
         if (childType != bt_integer) {
             t_error(expr_type_err, parent->m_attribute); 
@@ -541,15 +543,30 @@ class Typecheck : public Visitor
     // addressof
     void checkset_deref_lhs(DerefVariable* p)
     {
+        Symbol* s = m_st->lookup(p->m_symname->spelling());
+        if (!s) {
+            t_error(var_undef, p->m_attribute);
+        }
+
+        if (s->m_basetype != bt_intptr && s->m_basetype != bt_charptr) {
+            t_error(invalid_deref, p->m_attribute);
+            return;
+        }
+
+        if (s->m_basetype == bt_intptr) {
+            p->m_attribute.m_basetype = bt_integer;
+        } else if (s->m_basetype == bt_charptr) {
+            p->m_attribute.m_basetype = bt_char;
+        }
     }
 
     void checkset_variable(Variable* p)
     {
-        Symbol* varSymbol = m_st->lookup(p->m_symname->spelling());
-        if (!varSymbol) {
+        Symbol* s = m_st->lookup(p->m_symname->spelling());
+        if (!s) {
             t_error(var_undef, p->m_attribute);
         } else {
-            p->m_attribute.m_basetype = varSymbol->m_basetype;
+            p->m_attribute.m_basetype = s->m_basetype;
 
         }
     }
@@ -645,6 +662,7 @@ class Typecheck : public Visitor
 
     void visitReturn(Return* p)
     {
+        
     }
 
     void visitIfNoElse(IfNoElse* p)
@@ -671,7 +689,7 @@ class Typecheck : public Visitor
         p->m_expr->accept(this);
 
         // Now, check the type of the predicate
-        check_pred_if(p->m_expr);
+        check_pred_while(p->m_expr);
 
         // Then, visit the body of the while loop
         p->m_nested_block->accept(this);
@@ -848,19 +866,14 @@ class Typecheck : public Visitor
     }
 
     void visitAbsoluteValue(AbsoluteValue* p) {
-        // First, visit the child to ensure its type is evaluated
         p->visit_children(this);
-
-        // Now, check and set the type for the absolute value expression
         checkset_absolute_value(p, p->m_expr);
     }
 
 
     void visitAddressOf(AddressOf* p) {
-        // First, visit the child to ensure its type is evaluated
         p->visit_children(this);
 
-        // Now, check and set the type for the addressof expression
         checkset_addressof(p, p->m_lhs);
     }
 
@@ -876,6 +889,8 @@ class Typecheck : public Visitor
     }
 
    void visitDerefVariable(DerefVariable* p) {
+        p->visit_children(this);
+        checkset_deref_lhs(p);
    }
 
     void visitArrayElement(ArrayElement* p) {

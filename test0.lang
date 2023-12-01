@@ -1,22 +1,21 @@
-procedure array(ax: integer) return boolean
+procedure array() return integer
 {
-  var a: string[12];
-  var b: string[12];
-  var x: integer;
-  var z: boolean;
+    var i, a: integer;
 
-  {a[2+3] = b[0];}
-	
+    i = |a|;
+    i = array();
+    
 
-
-  z = array(ax);
-
-  return true;
+    return 0;
 }
-
 
 procedure Main() return integer 
 {
+    procedure nested() return boolean
+    {
+        var i,a: integer;
+	return a == 12;
+    }
     var x: integer;
     var k, j: integer;
     var t: boolean;
