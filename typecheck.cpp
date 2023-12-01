@@ -185,6 +185,8 @@ class Typecheck : public Visitor
         Attribute main_attr;
         if (!m_st->lookup("Main")) {
             t_error(no_main, main_attr);
+        } else if (!m_st->lookup("Main")->m_arg_type.empty()) {
+            t_error(nonvoid_main, main_attr);
         }
     }
 
@@ -335,6 +337,11 @@ class Typecheck : public Visitor
     // For checking that this expressions type is boolean used in while
     void check_pred_while(Expr* p)
     {
+        Basetype exprType = p->m_attribute.m_basetype;
+
+        if (exprType != bt_boolean) {
+            t_error(whilepred_err, p->m_attribute); 
+        }
     }
 
     void check_assignment(Assignment* p) {
@@ -394,14 +401,34 @@ class Typecheck : public Visitor
     }
 
     // For checking arithmetic expressions(plus, times, ...)
-    void checkset_arithexpr(Expr* parent, Expr* child1, Expr* child2)
-    {
+    void checkset_arithexpr(Expr* parent, Expr* child1, Expr* child2) {
+        Basetype type1 = evaluate_expr_type(child1);
+        Basetype type2 = evaluate_expr_type(child2);
+
+        if (type1 != bt_integer || type2 != bt_integer) {
+            t_error(expr_type_err, parent->m_attribute);
+        }
+
+        parent->m_attribute.m_basetype = bt_integer;
     }
+
 
     // Called by plus and minus: in these cases we allow pointer arithmetics
     void checkset_arithexpr_or_pointer(Expr* parent, Expr* child1, Expr* child2)
     {
+        Basetype type1 = evaluate_expr_type(child1);
+        Basetype type2 = evaluate_expr_type(child2);
+
+        bool isValidPointerArithmetic = (type1 == bt_intptr && type2 == bt_integer) ||
+                                        (type2 == bt_intptr && type1 == bt_integer);
+
+        if (!(isValidPointerArithmetic || (type1 == bt_integer && type2 == bt_integer))) {
+             t_error(expr_pointer_arithmetic_err, parent->m_attribute);
+        }
+
+        parent->m_attribute.m_basetype = (isValidPointerArithmetic) ? bt_intptr : bt_integer;
     }
+    
 
     // For checking relational(less than , greater than, ...)
     void checkset_relationalexpr(Expr* parent, Expr* child1, Expr* child2)
@@ -415,12 +442,9 @@ class Typecheck : public Visitor
         bool isValidType2 = (type2 == bt_integer || (type2 == bt_undef && child2->m_attribute.m_basetype == bt_integer));
 
         if (!isValidType1 || !isValidType2) {
-            cout << "check";
-            t_error(expr_type_err, parent->m_attribute); // Error for type mismatch
-            return;
+            t_error(expr_type_err, parent->m_attribute);
         }
 
-        // Relational operations result in a boolean value
         parent->m_attribute.m_basetype = bt_boolean;
     }
 
@@ -432,10 +456,8 @@ class Typecheck : public Visitor
         Basetype type1 = evaluate_expr_type(child1);
         Basetype type2 = evaluate_expr_type(child2);
 
-        // Check if both children are of compatible types
         if (type1 != type2) {
-            t_error(expr_type_err, parent->m_attribute); // Error for type mismatch
-            return;
+            t_error(expr_type_err, parent->m_attribute);
         }
         parent->m_attribute.m_basetype = bt_boolean;
     }
@@ -458,7 +480,6 @@ class Typecheck : public Visitor
 
         if (childType != bt_integer) {
             t_error(expr_type_err, parent->m_attribute); 
-            return;
         }
 
         parent->m_attribute.m_basetype = childType;
@@ -469,7 +490,6 @@ class Typecheck : public Visitor
         
         if (childType != bt_integer) {
             t_error(expr_type_err, parent->m_attribute); 
-            return;
         }
 
         parent->m_attribute.m_basetype = childType;
@@ -508,7 +528,6 @@ class Typecheck : public Visitor
 
         if (childType != bt_ptr && childType != bt_charptr && childType != bt_intptr) {
             t_error(invalid_deref, parent->m_attribute);
-            return;
         }
 
         if (childType == bt_charptr) {
@@ -703,6 +722,7 @@ class Typecheck : public Visitor
     void visitDiv(Div* p)
     {
         p->visit_children(this);
+        checkset_arithexpr(p, p->m_expr_1, p->m_expr_2);
     }
 
     void visitCompare(Compare* p)
@@ -740,6 +760,7 @@ class Typecheck : public Visitor
     void visitMinus(Minus* p)
     {
         p->visit_children(this);
+        checkset_arithexpr_or_pointer(p, p->m_expr_1, p->m_expr_2);
     }
 
     void visitNoteq(Noteq* p)
@@ -759,11 +780,13 @@ class Typecheck : public Visitor
     void visitPlus(Plus* p)
     {
         p->visit_children(this);
+        checkset_arithexpr_or_pointer(p, p->m_expr_1, p->m_expr_2);
     }
 
     void visitTimes(Times* p)
     {
         p->visit_children(this);
+        checkset_arithexpr(p, p->m_expr_1, p->m_expr_2);
     }
 
     void visitNot(Not* p)
