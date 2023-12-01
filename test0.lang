@@ -1,51 +1,16 @@
-procedure array() return integer
-{
-    var i, a: integer;
 
-    i = |a|;
-    i = array();
-    
-
-    return 0;
+procedure foo() return integer {
+	var a: integer;
+	a = 0;
+	return 0; 
 }
 
-procedure Main() return integer 
-{
-    procedure nested() return boolean
-    {
-        var i,a: integer;
-	return a == 12;
-    }
-    var x: integer;
-    var k, j: integer;
-    var t: boolean;
 
-    if (x < 3) {
-        var y: integer;
-        y = 0;
-        x = 7;
-    }
-    while(true) { t = false; }
-    if (x <3) {
-        
-        x = 9;
-    }
-    else {
-        if (t == true) {
-            x = 12;
-        }
-    }
-   
-    return 0;
-}
+procedure Main() return integer { 
+	
+	var x: integer;
+	x = Main();
 
-procedure f(ax: integer) return boolean
-{
-    procedure nested() return boolean
-    {
-        var i,a: integer;
-	return a == 12;
-    }
-    var d: boolean;
-    return d;
+	x = 5 + 6 - x;
+	return 0; 
 }

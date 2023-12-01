@@ -657,12 +657,18 @@ class Typecheck : public Visitor
 
     void visitIdent(Ident* p)
     {
-        
+        p->visit_children(this);
+        char* name = strdup(p->m_symname->spelling());
+        if(!m_st->exist(name)) {
+            this->t_error(var_undef, p->m_attribute);
+        }
+        p->m_attribute.m_basetype = m_st->lookup(name)->m_basetype;
     }
 
     void visitReturn(Return* p)
     {
-        
+        p->visit_children(this);
+        check_return(p);
     }
 
     void visitIfNoElse(IfNoElse* p)
