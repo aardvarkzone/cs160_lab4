@@ -120,70 +120,6 @@ class Typecheck : public Visitor
 
     // Helpers
     // WRITEME: You might want write some helper functions.
-    Basetype evaluate_expr_type(Type* type) {
-        if (dynamic_cast<TInteger*>(type)) {
-            return bt_integer;
-        } else if (dynamic_cast<TCharacter*>(type)) {
-            return bt_char;
-        } else if (dynamic_cast<TBoolean*>(type)) {
-            return bt_boolean;
-        } else if (dynamic_cast<TCharPtr*>(type)) {
-            return bt_charptr;
-        } else if (dynamic_cast<TIntPtr*>(type)) {
-            return bt_intptr;
-        } else if (dynamic_cast<TString*>(type)) {
-            return bt_string;
-        } 
-        return bt_undef;
-    }
-
-    Basetype evaluate_expr_type(Expr* expr) {
-        if (auto intLit = dynamic_cast<IntLit*>(expr)) {
-            return bt_integer;
-        } else if (auto charLit = dynamic_cast<CharLit*>(expr)) {
-            return bt_char;
-        } else if (auto boolLit = dynamic_cast<BoolLit*>(expr)) {
-            return bt_boolean;
-        }
-        if (auto varExpr = dynamic_cast<Ident*>(expr)) {
-            Symbol* varSymbol = m_st->lookup(varExpr->m_symname->spelling());
-            if (varSymbol) return varSymbol->m_basetype;
-        }
-        if (auto binaryExpr = dynamic_cast<Plus*>(expr)) {
-            Basetype leftType = evaluate_expr_type(binaryExpr->m_expr_1);
-            Basetype rightType = evaluate_expr_type(binaryExpr->m_expr_2);
-            if (leftType == bt_integer && rightType == bt_integer) return bt_integer;
-        } else if (auto relExpr = dynamic_cast<Lt*>(expr) || 
-                dynamic_cast<Gt*>(expr) || 
-                dynamic_cast<Lteq*>(expr) || 
-                dynamic_cast<Gteq*>(expr) || 
-                dynamic_cast<Compare*>(expr) ||
-                dynamic_cast<Noteq*>(expr)) {
-            return bt_boolean;
-        } 
-        if (auto unaryExpr = dynamic_cast<Expr*>(expr)) {
-            return evaluate_expr_type(unaryExpr);
-        } 
-       if (auto lhsExpr = dynamic_cast<Lhs*>(expr)) {
-            if (auto ident = dynamic_cast<Ident*>(lhsExpr)) {
-                Symbol* varSymbol = m_st->lookup(ident->m_symname->spelling());
-                if (varSymbol) return varSymbol->m_basetype;
-            }
-            if (auto arrayAccess = dynamic_cast<ArrayAccess*>(lhsExpr)) {
-                return bt_charptr;
-            }
-        }
-        if (auto absExpr = dynamic_cast<AbsoluteValue*>(expr)) {
-            Basetype childType = evaluate_expr_type(absExpr->m_expr);
-            if (childType == bt_integer || childType == bt_string) {
-                return bt_integer;
-            } else {
-                return bt_undef; 
-            }
-        }
-        return bt_undef; 
-    }
-
 
 
     // Type Checking
@@ -210,7 +146,7 @@ class Typecheck : public Visitor
         for (auto& declPtr : *(p->m_decl_list)) {
             DeclImpl* decl = dynamic_cast<DeclImpl*>(declPtr);
             if (decl) {  
-                Basetype argType = evaluate_expr_type(decl->m_type);
+                Basetype argType = decl->m_type->m_attribute.m_basetype;
                 s->m_arg_type.push_back(argType);
             }
         }
@@ -257,15 +193,6 @@ class Typecheck : public Visitor
             }
         }
         
-    }
-
-    Expr* convert_lhs_to_expr(Lhs* lhs) {
-        if (auto var = dynamic_cast<Variable*>(lhs)) {
-            return new Ident(var->m_symname); // Assuming Ident is an Expr that represents variable access
-        } else if (auto arrayElem = dynamic_cast<ArrayElement*>(lhs)) {
-            return new ArrayAccess(arrayElem->m_symname, arrayElem->m_expr);
-        } // Add more cases for other Lhs subclasses
-        return nullptr;
     }
     
     // Check that the return statement of a procedure has the appropriate type
@@ -339,23 +266,15 @@ class Typecheck : public Visitor
             free(name);
             return;
         }
-
-        auto argIterator = p->m_expr_list->begin();
-        for (size_t i = 0; i < procSymbol->m_arg_type.size(); ++i, ++argIterator) {
-            Basetype argType = evaluate_expr_type(*argIterator);
-            // cout << "Arg " << (i+1) << ": Expected type: " << procSymbol->m_arg_type[i]
-                // << ", Found type: " << argType << endl;
-            if (argType == bt_ptr && procSymbol->m_arg_type[i] == bt_charptr) { cout << "test"; }
-            if (argType != procSymbol->m_arg_type[i]) {
-               
-                
-                    t_error(arg_type_mismatch, p->m_attribute);
-                    free(name);
-                    return;
-                
+        size_t index = 0; 
+        for (auto arg : *p->m_expr_list) {
+            Basetype argType = arg->m_attribute.m_basetype;
+            // if (argType == bt_ptr && procSymbol->m_arg_type == bt_charptr) { cout << "test"; }
+            if (argType != procSymbol->m_arg_type[index]) {
+                t_error(arg_type_mismatch, p->m_attribute);
             }
+            index++;
         }
-
         free(name);
     }
 
@@ -408,12 +327,6 @@ class Typecheck : public Visitor
 
 
     void check_string_assignment(StringAssignment* p) {
-        // Expr* lhsExpr = convert_lhs_to_expr(p->m_lhs);
-        // Basetype lhsType = evaluate_expr_type(lhsExpr);
-
-        // if (lhsType != bt_string && lhsType != bt_charptr) {
-        //     t_error(incompat_assign, p->m_lhs->m_attribute);
-        // }
         if (p->m_lhs->m_attribute.m_basetype != bt_string) {
              t_error(incompat_assign, p->m_lhs->m_attribute);
         }
@@ -463,6 +376,10 @@ class Typecheck : public Visitor
         Basetype type1 = child1->m_attribute.m_basetype;
         Basetype type2 = child2->m_attribute.m_basetype;
 
+        if (type1 != bt_intptr || type2 != bt_intptr || type1 != bt_charptr || type2 != bt_charptr) {
+            t_error(expr_pointer_arithmetic_err, parent->m_attribute);
+        }
+
         if (type1 != bt_integer || type2 != bt_integer) {
             t_error(expr_type_err, parent->m_attribute);
         }
@@ -476,6 +393,7 @@ class Typecheck : public Visitor
     {
         Basetype type1 = child1->m_attribute.m_basetype;
         Basetype type2 = child2->m_attribute.m_basetype;
+
 
         if (type1 == bt_integer && type2 == bt_integer) {
             parent->m_attribute.m_basetype = bt_integer;
@@ -493,15 +411,16 @@ class Typecheck : public Visitor
     // For checking relational(less than , greater than, ...)
     void checkset_relationalexpr(Expr* parent, Expr* child1, Expr* child2)
     {
-        // Basetype type1 = child1->m_attribute.m_basetype;
-        // Basetype type2 = child2->m_attribute.m_basetype;
-        Basetype type1 = evaluate_expr_type(child1);
-        Basetype type2 = evaluate_expr_type(child2);
+        Basetype type1 = child1->m_attribute.m_basetype;
+        Basetype type2 = child2->m_attribute.m_basetype;
 
-        bool isValidType1 = (type1 == bt_integer || (type1 == bt_undef && child1->m_attribute.m_basetype == bt_integer));
-        bool isValidType2 = (type2 == bt_integer || (type2 == bt_undef && child2->m_attribute.m_basetype == bt_integer));
+        // Basetype type1 = evaluate_expr_type(child1);
+        // Basetype type2 = evaluate_expr_type(child2);
 
-        if (!isValidType1 || !isValidType2) {
+        // bool isValidType1 = (type1 == bt_integer || (type1 == bt_undef && child1->m_attribute.m_basetype == bt_integer));
+        // bool isValidType2 = (type2 == bt_integer || (type2 == bt_undef && child2->m_attribute.m_basetype == bt_integer));
+
+        if (type1 != bt_integer || type2 != bt_integer) {
             t_error(expr_type_err, parent->m_attribute);
         }
 
@@ -511,10 +430,10 @@ class Typecheck : public Visitor
     // For checking equality ops(equal, not equal)
     void checkset_equalityexpr(Expr* parent, Expr* child1, Expr* child2)
     {
-        // Basetype type1 = child1->m_attribute.m_basetype;
-        // Basetype type2 = child2->m_attribute.m_basetype;
-        Basetype type1 = evaluate_expr_type(child1);
-        Basetype type2 = evaluate_expr_type(child2);
+        Basetype type1 = child1->m_attribute.m_basetype;
+        Basetype type2 = child2->m_attribute.m_basetype;
+        // Basetype type1 = evaluate_expr_type(child1);
+        // Basetype type2 = evaluate_expr_type(child2);
 
         if (type1 != type2) {
             t_error(expr_type_err, parent->m_attribute);
@@ -585,7 +504,7 @@ class Typecheck : public Visitor
 
     void checkset_deref_expr(Deref* parent,Expr* child)
     {
-        Basetype childType = evaluate_expr_type(child);
+        Basetype childType = child->m_attribute.m_basetype;
 
         if (childType != bt_charptr && childType != bt_intptr) {
             t_error(invalid_deref, parent->m_attribute);
