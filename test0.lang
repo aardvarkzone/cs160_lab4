@@ -1,9 +1,11 @@
-
 procedure foo() return charptr {
 	var a: string[15];
+    var d: char;
 	var c: charptr; 
+
 	a[10] = 'a';
-	
+    c = null;
+	d = ^null;
 	
 	
 	return null; 

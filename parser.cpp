@@ -512,7 +512,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  19
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  63
+#define YYNRULES  64
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  136
 
@@ -568,13 +568,13 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    89,    89,    96,    97,   103,   108,   109,   110,   116,
-     119,   120,   126,   131,   134,   135,   141,   142,   149,   150,
-     156,   157,   158,   159,   160,   161,   162,   165,   166,   167,
-     170,   171,   173,   174,   177,   178,   179,   180,   181,   182,
-     183,   184,   185,   186,   187,   188,   189,   190,   191,   192,
-     193,   194,   195,   196,   197,   198,   199,   200,   203,   204,
-     205,   206,   207,   210
+       0,    89,    89,    94,    99,   100,   106,   111,   112,   113,
+     119,   122,   123,   129,   134,   137,   138,   144,   145,   152,
+     153,   159,   160,   161,   162,   163,   164,   165,   168,   169,
+     170,   173,   174,   176,   177,   180,   181,   182,   183,   184,
+     185,   186,   187,   188,   189,   190,   191,   192,   193,   194,
+     195,   196,   197,   198,   199,   200,   201,   202,   203,   206,
+     207,   208,   209,   210,   213
 };
 #endif
 
@@ -645,20 +645,20 @@ static const yytype_int16 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     3,     0,     1,     2,     3,     6,     4,
-      10,     0,     7,     0,     0,     0,     0,     0,    11,     8,
-       0,    58,    59,    60,    61,    62,     9,     0,     3,    14,
-       0,     0,    18,    14,     5,     0,    27,     0,     0,     0,
-      14,     0,    18,     0,    26,    15,     0,     0,     0,     0,
-      29,    18,     0,    12,    19,     0,     0,     0,    51,    53,
-      54,    55,    57,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    51,     0,     0,     0,    16,     0,
-      50,    49,    36,    56,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    28,     0,
-       0,    63,    13,    30,    21,    20,     0,     0,    34,    35,
-      37,    38,    39,    40,    41,    42,    43,    44,    45,    46,
-      47,    48,    23,    25,     0,    31,    33,     0,    52,     0,
-       0,     0,    17,    24,    22,    32
+       3,     0,     0,     4,     0,     1,     2,     4,     7,     5,
+      11,     0,     8,     0,     0,     0,     0,     0,    12,     9,
+       0,    59,    60,    61,    62,    63,    10,     0,     4,    15,
+       0,     0,    19,    15,     6,     0,    28,     0,     0,     0,
+      15,     0,    19,     0,    27,    16,     0,     0,     0,     0,
+      30,    19,     0,    13,    20,     0,     0,     0,    52,    54,
+      55,    56,    58,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,    52,     0,     0,     0,    17,     0,
+      51,    50,    37,    57,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    29,     0,
+       0,    64,    14,    31,    22,    21,     0,     0,    35,    36,
+      38,    39,    40,    41,    42,    43,    44,    45,    46,    47,
+      48,    49,    24,    26,     0,    32,    34,     0,    53,     0,
+       0,     0,    18,    25,    23,    33
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -767,25 +767,25 @@ static const yytype_int8 yystos[] =
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    47,    48,    49,    49,    50,    51,    51,    51,    52,
-      53,    53,    54,    55,    56,    56,    57,    57,    58,    58,
-      59,    59,    59,    59,    59,    59,    59,    60,    60,    60,
-      61,    61,    62,    62,    63,    63,    63,    63,    63,    63,
+       0,    47,    48,    48,    49,    49,    50,    51,    51,    51,
+      52,    53,    53,    54,    55,    56,    56,    57,    57,    58,
+      58,    59,    59,    59,    59,    59,    59,    59,    60,    60,
+      60,    61,    61,    62,    62,    63,    63,    63,    63,    63,
       63,    63,    63,    63,    63,    63,    63,    63,    63,    63,
-      63,    63,    63,    63,    63,    63,    63,    63,    64,    64,
-      64,    64,    64,    65
+      63,    63,    63,    63,    63,    63,    63,    63,    63,    64,
+      64,    64,    64,    64,    65
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     2,     0,     2,    10,     0,     1,     3,     3,
-       1,     3,     4,     3,     0,     2,     5,     8,     0,     2,
-       4,     4,     7,     5,     7,     5,     1,     1,     4,     2,
-       0,     1,     3,     1,     3,     3,     2,     3,     3,     3,
-       3,     3,     3,     3,     3,     3,     3,     3,     3,     2,
-       2,     1,     4,     1,     1,     1,     2,     1,     1,     1,
-       1,     1,     1,     4
+       0,     2,     2,     0,     0,     2,    10,     0,     1,     3,
+       3,     1,     3,     4,     3,     0,     2,     5,     8,     0,
+       2,     4,     4,     7,     5,     7,     5,     1,     1,     4,
+       2,     0,     1,     3,     1,     3,     3,     2,     3,     3,
+       3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
+       2,     2,     1,     4,     1,     1,     1,     2,     1,     1,
+       1,     1,     1,     1,     4
 };
 
 
@@ -1528,391 +1528,399 @@ yyreduce:
 #line 1529 "parser.cpp"
     break;
 
-  case 3: /* Procedures: %empty  */
-#line 96 "parser.ypp"
-             { (yyval.u_proc_list) = new list<Proc_ptr>(); }
-#line 1535 "parser.cpp"
+  case 3: /* Program: %empty  */
+#line 94 "parser.ypp"
+          { (yyval.u_program) = new ProgramImpl(new list<Proc_ptr>()); 
+            ast = (yyval.u_program); 
+        }
+#line 1537 "parser.cpp"
     break;
 
-  case 4: /* Procedures: Procedure Procedures  */
-#line 97 "parser.ypp"
+  case 4: /* Procedures: %empty  */
+#line 99 "parser.ypp"
+             { (yyval.u_proc_list) = new list<Proc_ptr>(); }
+#line 1543 "parser.cpp"
+    break;
+
+  case 5: /* Procedures: Procedure Procedures  */
+#line 100 "parser.ypp"
                                   { 
                 (yyvsp[0].u_proc_list)->push_front((yyvsp[-1].u_proc)); 
                 (yyval.u_proc_list) = (yyvsp[0].u_proc_list); 
              }
-#line 1544 "parser.cpp"
-    break;
-
-  case 5: /* Procedure: PROCEDURE IDENTIFIER LPAREN ParamList RPAREN RETURN Type LBRACE Body RBRACE  */
-#line 103 "parser.ypp"
-                                                                                        {
-                (yyval.u_proc) = new ProcImpl(new SymName((yyvsp[-8].u_base_charptr)), (yyvsp[-6].u_decl_list), (yyvsp[-3].u_type), (yyvsp[-1].u_procedure_block)); 
-            }
 #line 1552 "parser.cpp"
     break;
 
-  case 6: /* ParamList: %empty  */
-#line 108 "parser.ypp"
+  case 6: /* Procedure: PROCEDURE IDENTIFIER LPAREN ParamList RPAREN RETURN Type LBRACE Body RBRACE  */
+#line 106 "parser.ypp"
+                                                                                        {
+                (yyval.u_proc) = new ProcImpl(new SymName((yyvsp[-8].u_base_charptr)), (yyvsp[-6].u_decl_list), (yyvsp[-3].u_type), (yyvsp[-1].u_procedure_block)); 
+            }
+#line 1560 "parser.cpp"
+    break;
+
+  case 7: /* ParamList: %empty  */
+#line 111 "parser.ypp"
             { (yyval.u_decl_list) = new list<Decl_ptr>(); }
-#line 1558 "parser.cpp"
+#line 1566 "parser.cpp"
     break;
 
-  case 7: /* ParamList: Param  */
-#line 109 "parser.ypp"
+  case 8: /* ParamList: Param  */
+#line 112 "parser.ypp"
                   { (yyval.u_decl_list) = new list<Decl_ptr> {(yyvsp[0].u_decl)}; }
-#line 1564 "parser.cpp"
+#line 1572 "parser.cpp"
     break;
 
-  case 8: /* ParamList: ParamList SEMICOLON Param  */
-#line 110 "parser.ypp"
+  case 9: /* ParamList: ParamList SEMICOLON Param  */
+#line 113 "parser.ypp"
                                       { 
                 (yyvsp[-2].u_decl_list)->push_back((yyvsp[0].u_decl));
                 (yyval.u_decl_list) = (yyvsp[-2].u_decl_list);
             }
-#line 1573 "parser.cpp"
+#line 1581 "parser.cpp"
     break;
 
-  case 9: /* Param: IDList COLON Type  */
-#line 116 "parser.ypp"
-                          { (yyval.u_decl) = new DeclImpl((yyvsp[-2].u_symname_list), (yyvsp[0].u_type)); }
-#line 1579 "parser.cpp"
-    break;
-
-  case 10: /* IDList: IDENTIFIER  */
+  case 10: /* Param: IDList COLON Type  */
 #line 119 "parser.ypp"
-                    { (yyval.u_symname_list) = new list<SymName_ptr>{new SymName((yyvsp[0].u_base_charptr))}; }
-#line 1585 "parser.cpp"
+                          { (yyval.u_decl) = new DeclImpl((yyvsp[-2].u_symname_list), (yyvsp[0].u_type)); }
+#line 1587 "parser.cpp"
     break;
 
-  case 11: /* IDList: IDENTIFIER COMMA IDList  */
-#line 120 "parser.ypp"
+  case 11: /* IDList: IDENTIFIER  */
+#line 122 "parser.ypp"
+                    { (yyval.u_symname_list) = new list<SymName_ptr>{new SymName((yyvsp[0].u_base_charptr))}; }
+#line 1593 "parser.cpp"
+    break;
+
+  case 12: /* IDList: IDENTIFIER COMMA IDList  */
+#line 123 "parser.ypp"
                                  {
             (yyvsp[0].u_symname_list)->push_front(new SymName((yyvsp[-2].u_base_charptr)));
             (yyval.u_symname_list) = (yyvsp[0].u_symname_list);
         }
-#line 1594 "parser.cpp"
-    break;
-
-  case 12: /* Body: Procedures Declarations Statements Return  */
-#line 126 "parser.ypp"
-                                                 {
-            (yyval.u_procedure_block) = new Procedure_blockImpl((yyvsp[-3].u_proc_list), (yyvsp[-2].u_decl_list), (yyvsp[-1].u_stat_list), (yyvsp[0].u_return_stat));
-        }
 #line 1602 "parser.cpp"
     break;
 
-  case 13: /* Return: RETURN Expression SEMICOLON  */
-#line 131 "parser.ypp"
-                                     { (yyval.u_return_stat) = new Return((yyvsp[-1].u_expr)); }
-#line 1608 "parser.cpp"
+  case 13: /* Body: Procedures Declarations Statements Return  */
+#line 129 "parser.ypp"
+                                                 {
+            (yyval.u_procedure_block) = new Procedure_blockImpl((yyvsp[-3].u_proc_list), (yyvsp[-2].u_decl_list), (yyvsp[-1].u_stat_list), (yyvsp[0].u_return_stat));
+        }
+#line 1610 "parser.cpp"
     break;
 
-  case 14: /* Declarations: %empty  */
+  case 14: /* Return: RETURN Expression SEMICOLON  */
 #line 134 "parser.ypp"
-               { (yyval.u_decl_list) = new std::list<Decl_ptr>(); }
-#line 1614 "parser.cpp"
+                                     { (yyval.u_return_stat) = new Return((yyvsp[-1].u_expr)); }
+#line 1616 "parser.cpp"
     break;
 
-  case 15: /* Declarations: Declaration Declarations  */
-#line 135 "parser.ypp"
+  case 15: /* Declarations: %empty  */
+#line 137 "parser.ypp"
+               { (yyval.u_decl_list) = new std::list<Decl_ptr>(); }
+#line 1622 "parser.cpp"
+    break;
+
+  case 16: /* Declarations: Declaration Declarations  */
+#line 138 "parser.ypp"
                                         { 
                    (yyvsp[0].u_decl_list)->push_front((yyvsp[-1].u_decl));
                    (yyval.u_decl_list) = (yyvsp[0].u_decl_list);
                }
-#line 1623 "parser.cpp"
+#line 1631 "parser.cpp"
     break;
 
-  case 16: /* Declaration: VAR IDList COLON Type SEMICOLON  */
-#line 141 "parser.ypp"
+  case 17: /* Declaration: VAR IDList COLON Type SEMICOLON  */
+#line 144 "parser.ypp"
                                               { (yyval.u_decl) = new DeclImpl((yyvsp[-3].u_symname_list), (yyvsp[-1].u_type)); }
-#line 1629 "parser.cpp"
+#line 1637 "parser.cpp"
     break;
 
-  case 17: /* Declaration: VAR IDList COLON STRING LBRACKET INT_LITERAL RBRACKET SEMICOLON  */
-#line 142 "parser.ypp"
+  case 18: /* Declaration: VAR IDList COLON STRING LBRACKET INT_LITERAL RBRACKET SEMICOLON  */
+#line 145 "parser.ypp"
                                                                               { 
                   Primitive *temp = new Primitive((yyvsp[-2].u_base_int));
                   Type *tempA = new TString(temp);
                   (yyval.u_decl) = new DeclImpl((yyvsp[-6].u_symname_list), tempA);
               }
-#line 1639 "parser.cpp"
+#line 1647 "parser.cpp"
     break;
 
-  case 18: /* Statements: %empty  */
-#line 149 "parser.ypp"
+  case 19: /* Statements: %empty  */
+#line 152 "parser.ypp"
              { (yyval.u_stat_list) = new std::list<Stat_ptr>(); }
-#line 1645 "parser.cpp"
+#line 1653 "parser.cpp"
     break;
 
-  case 19: /* Statements: Statement Statements  */
-#line 150 "parser.ypp"
+  case 20: /* Statements: Statement Statements  */
+#line 153 "parser.ypp"
                                   {
                  (yyvsp[0].u_stat_list)->push_front((yyvsp[-1].u_stat));
                  (yyval.u_stat_list) = (yyvsp[0].u_stat_list);
              }
-#line 1654 "parser.cpp"
+#line 1662 "parser.cpp"
     break;
 
-  case 20: /* Statement: LHS EQUAL Expression SEMICOLON  */
-#line 156 "parser.ypp"
-                                           { (yyval.u_stat) = new Assignment((yyvsp[-3].u_lhs), (yyvsp[-1].u_expr)); }
-#line 1660 "parser.cpp"
-    break;
-
-  case 21: /* Statement: LHS EQUAL STRING_LITERAL SEMICOLON  */
-#line 157 "parser.ypp"
-                                               { (yyval.u_stat) = new StringAssignment((yyvsp[-3].u_lhs), new StringPrimitive((yyvsp[-1].u_base_charptr))); }
-#line 1666 "parser.cpp"
-    break;
-
-  case 22: /* Statement: LHS EQUAL IDENTIFIER LPAREN ExpressionListOpt RPAREN SEMICOLON  */
-#line 158 "parser.ypp"
-                                                                           { (yyval.u_stat) = new Call((yyvsp[-6].u_lhs), new SymName((yyvsp[-4].u_base_charptr)), (yyvsp[-2].u_expr_list)); }
-#line 1672 "parser.cpp"
-    break;
-
-  case 23: /* Statement: IF LPAREN Expression RPAREN Block  */
+  case 21: /* Statement: LHS EQUAL Expression SEMICOLON  */
 #line 159 "parser.ypp"
-                                              { (yyval.u_stat) = new IfNoElse((yyvsp[-2].u_expr), (yyvsp[0].u_nested_block)); }
-#line 1678 "parser.cpp"
+                                           { (yyval.u_stat) = new Assignment((yyvsp[-3].u_lhs), (yyvsp[-1].u_expr)); }
+#line 1668 "parser.cpp"
     break;
 
-  case 24: /* Statement: IF LPAREN Expression RPAREN Block ELSE Block  */
+  case 22: /* Statement: LHS EQUAL STRING_LITERAL SEMICOLON  */
 #line 160 "parser.ypp"
-                                                         { (yyval.u_stat) = new IfWithElse((yyvsp[-4].u_expr), (yyvsp[-2].u_nested_block), (yyvsp[0].u_nested_block)); }
-#line 1684 "parser.cpp"
+                                               { (yyval.u_stat) = new StringAssignment((yyvsp[-3].u_lhs), new StringPrimitive((yyvsp[-1].u_base_charptr))); }
+#line 1674 "parser.cpp"
     break;
 
-  case 25: /* Statement: WHILE LPAREN Expression RPAREN Block  */
+  case 23: /* Statement: LHS EQUAL IDENTIFIER LPAREN ExpressionListOpt RPAREN SEMICOLON  */
 #line 161 "parser.ypp"
-                                                 { (yyval.u_stat) = new WhileLoop((yyvsp[-2].u_expr), (yyvsp[0].u_nested_block)); }
-#line 1690 "parser.cpp"
+                                                                           { (yyval.u_stat) = new Call((yyvsp[-6].u_lhs), new SymName((yyvsp[-4].u_base_charptr)), (yyvsp[-2].u_expr_list)); }
+#line 1680 "parser.cpp"
     break;
 
-  case 26: /* Statement: Block  */
+  case 24: /* Statement: IF LPAREN Expression RPAREN Block  */
 #line 162 "parser.ypp"
-                  { (yyval.u_stat) = new CodeBlock((yyvsp[0].u_nested_block)); }
-#line 1696 "parser.cpp"
+                                              { (yyval.u_stat) = new IfNoElse((yyvsp[-2].u_expr), (yyvsp[0].u_nested_block)); }
+#line 1686 "parser.cpp"
     break;
 
-  case 27: /* LHS: IDENTIFIER  */
+  case 25: /* Statement: IF LPAREN Expression RPAREN Block ELSE Block  */
+#line 163 "parser.ypp"
+                                                         { (yyval.u_stat) = new IfWithElse((yyvsp[-4].u_expr), (yyvsp[-2].u_nested_block), (yyvsp[0].u_nested_block)); }
+#line 1692 "parser.cpp"
+    break;
+
+  case 26: /* Statement: WHILE LPAREN Expression RPAREN Block  */
+#line 164 "parser.ypp"
+                                                 { (yyval.u_stat) = new WhileLoop((yyvsp[-2].u_expr), (yyvsp[0].u_nested_block)); }
+#line 1698 "parser.cpp"
+    break;
+
+  case 27: /* Statement: Block  */
 #line 165 "parser.ypp"
+                  { (yyval.u_stat) = new CodeBlock((yyvsp[0].u_nested_block)); }
+#line 1704 "parser.cpp"
+    break;
+
+  case 28: /* LHS: IDENTIFIER  */
+#line 168 "parser.ypp"
                  { (yyval.u_lhs) = new Variable(new SymName((yyvsp[0].u_base_charptr))); }
-#line 1702 "parser.cpp"
+#line 1710 "parser.cpp"
     break;
 
-  case 28: /* LHS: IDENTIFIER LBRACKET Expression RBRACKET  */
-#line 166 "parser.ypp"
+  case 29: /* LHS: IDENTIFIER LBRACKET Expression RBRACKET  */
+#line 169 "parser.ypp"
                                               { (yyval.u_lhs) = new ArrayElement(new SymName((yyvsp[-3].u_base_charptr)), (yyvsp[-1].u_expr)); }
-#line 1708 "parser.cpp"
+#line 1716 "parser.cpp"
     break;
 
-  case 29: /* LHS: DEREFERENCE IDENTIFIER  */
-#line 167 "parser.ypp"
-                             { (yyval.u_lhs) = new DerefVariable(new SymName((yyvsp[0].u_base_charptr))); }
-#line 1714 "parser.cpp"
-    break;
-
-  case 30: /* ExpressionListOpt: %empty  */
+  case 30: /* LHS: DEREFERENCE IDENTIFIER  */
 #line 170 "parser.ypp"
-                    { (yyval.u_expr_list) = new std::list<Expr_ptr>(); }
-#line 1720 "parser.cpp"
+                             { (yyval.u_lhs) = new DerefVariable(new SymName((yyvsp[0].u_base_charptr))); }
+#line 1722 "parser.cpp"
     break;
 
-  case 32: /* ExpressionList: Expression COMMA ExpressionList  */
+  case 31: /* ExpressionListOpt: %empty  */
 #line 173 "parser.ypp"
+                    { (yyval.u_expr_list) = new std::list<Expr_ptr>(); }
+#line 1728 "parser.cpp"
+    break;
+
+  case 33: /* ExpressionList: Expression COMMA ExpressionList  */
+#line 176 "parser.ypp"
                                                  { (yyvsp[0].u_expr_list)->push_front((yyvsp[-2].u_expr)); (yyval.u_expr_list) = (yyvsp[0].u_expr_list); }
-#line 1726 "parser.cpp"
+#line 1734 "parser.cpp"
     break;
 
-  case 33: /* ExpressionList: Expression  */
-#line 174 "parser.ypp"
-                            { (yyval.u_expr_list) = new std::list<Expr_ptr> {(yyvsp[0].u_expr)}; }
-#line 1732 "parser.cpp"
-    break;
-
-  case 34: /* Expression: LPAREN Expression RPAREN  */
+  case 34: /* ExpressionList: Expression  */
 #line 177 "parser.ypp"
-                                      { (yyval.u_expr) = (yyvsp[-1].u_expr); }
-#line 1738 "parser.cpp"
+                            { (yyval.u_expr_list) = new std::list<Expr_ptr> {(yyvsp[0].u_expr)}; }
+#line 1740 "parser.cpp"
     break;
 
-  case 35: /* Expression: BAR Expression BAR  */
-#line 178 "parser.ypp"
-                                { (yyval.u_expr) = new AbsoluteValue((yyvsp[-1].u_expr)); }
-#line 1744 "parser.cpp"
-    break;
-
-  case 36: /* Expression: AMP LHS  */
-#line 179 "parser.ypp"
-                     { (yyval.u_expr) = new AddressOf((yyvsp[0].u_lhs)); }
-#line 1750 "parser.cpp"
-    break;
-
-  case 37: /* Expression: Expression AND Expression  */
+  case 35: /* Expression: LPAREN Expression RPAREN  */
 #line 180 "parser.ypp"
-                                       { (yyval.u_expr) = new And((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1756 "parser.cpp"
+                                      { (yyval.u_expr) = (yyvsp[-1].u_expr); }
+#line 1746 "parser.cpp"
     break;
 
-  case 38: /* Expression: Expression DIV Expression  */
+  case 36: /* Expression: BAR Expression BAR  */
 #line 181 "parser.ypp"
-                                        { (yyval.u_expr) = new Div((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1762 "parser.cpp"
+                                { (yyval.u_expr) = new AbsoluteValue((yyvsp[-1].u_expr)); }
+#line 1752 "parser.cpp"
     break;
 
-  case 39: /* Expression: Expression EQUALS Expression  */
+  case 37: /* Expression: AMP LHS  */
 #line 182 "parser.ypp"
-                                          { (yyval.u_expr) = new Compare((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1768 "parser.cpp"
+                     { (yyval.u_expr) = new AddressOf((yyvsp[0].u_lhs)); }
+#line 1758 "parser.cpp"
     break;
 
-  case 40: /* Expression: Expression GT Expression  */
+  case 38: /* Expression: Expression AND Expression  */
 #line 183 "parser.ypp"
-                                       { (yyval.u_expr) = new Gt((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1774 "parser.cpp"
+                                       { (yyval.u_expr) = new And((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1764 "parser.cpp"
     break;
 
-  case 41: /* Expression: Expression GTE Expression  */
+  case 39: /* Expression: Expression DIV Expression  */
 #line 184 "parser.ypp"
-                                        { (yyval.u_expr) = new Gteq((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1780 "parser.cpp"
+                                        { (yyval.u_expr) = new Div((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1770 "parser.cpp"
     break;
 
-  case 42: /* Expression: Expression LT Expression  */
+  case 40: /* Expression: Expression EQUALS Expression  */
 #line 185 "parser.ypp"
-                                      { (yyval.u_expr) = new Lt((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1786 "parser.cpp"
+                                          { (yyval.u_expr) = new Compare((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1776 "parser.cpp"
     break;
 
-  case 43: /* Expression: Expression LTE Expression  */
+  case 41: /* Expression: Expression GT Expression  */
 #line 186 "parser.ypp"
-                                       { (yyval.u_expr) = new Lteq((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1792 "parser.cpp"
+                                       { (yyval.u_expr) = new Gt((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1782 "parser.cpp"
     break;
 
-  case 44: /* Expression: Expression MINUS Expression  */
+  case 42: /* Expression: Expression GTE Expression  */
 #line 187 "parser.ypp"
-                                          { (yyval.u_expr) = new Minus((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1798 "parser.cpp"
+                                        { (yyval.u_expr) = new Gteq((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1788 "parser.cpp"
     break;
 
-  case 45: /* Expression: Expression NOTEQUAL Expression  */
+  case 43: /* Expression: Expression LT Expression  */
 #line 188 "parser.ypp"
-                                            { (yyval.u_expr) = new Noteq((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1804 "parser.cpp"
+                                      { (yyval.u_expr) = new Lt((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1794 "parser.cpp"
     break;
 
-  case 46: /* Expression: Expression OR Expression  */
+  case 44: /* Expression: Expression LTE Expression  */
 #line 189 "parser.ypp"
-                                      { (yyval.u_expr) = new Or((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1810 "parser.cpp"
+                                       { (yyval.u_expr) = new Lteq((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1800 "parser.cpp"
     break;
 
-  case 47: /* Expression: Expression PLUS Expression  */
+  case 45: /* Expression: Expression MINUS Expression  */
 #line 190 "parser.ypp"
-                                         { (yyval.u_expr) = new Plus((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1816 "parser.cpp"
+                                          { (yyval.u_expr) = new Minus((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1806 "parser.cpp"
     break;
 
-  case 48: /* Expression: Expression MUL Expression  */
+  case 46: /* Expression: Expression NOTEQUAL Expression  */
 #line 191 "parser.ypp"
-                                       { (yyval.u_expr) = new Times((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
-#line 1822 "parser.cpp"
+                                            { (yyval.u_expr) = new Noteq((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1812 "parser.cpp"
     break;
 
-  case 49: /* Expression: NOT Expression  */
+  case 47: /* Expression: Expression OR Expression  */
 #line 192 "parser.ypp"
-                            {(yyval.u_expr) = new Not((yyvsp[0].u_expr));}
-#line 1828 "parser.cpp"
+                                      { (yyval.u_expr) = new Or((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1818 "parser.cpp"
     break;
 
-  case 50: /* Expression: MINUS Expression  */
+  case 48: /* Expression: Expression PLUS Expression  */
 #line 193 "parser.ypp"
-                              {(yyval.u_expr) = new Uminus((yyvsp[0].u_expr));}
-#line 1834 "parser.cpp"
+                                         { (yyval.u_expr) = new Plus((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1824 "parser.cpp"
     break;
 
-  case 51: /* Expression: IDENTIFIER  */
+  case 49: /* Expression: Expression MUL Expression  */
 #line 194 "parser.ypp"
-                        { (yyval.u_expr) = new Ident(new SymName((yyvsp[0].u_base_charptr))); }
-#line 1840 "parser.cpp"
+                                       { (yyval.u_expr) = new Times((yyvsp[-2].u_expr), (yyvsp[0].u_expr)); }
+#line 1830 "parser.cpp"
     break;
 
-  case 52: /* Expression: IDENTIFIER LBRACKET Expression RBRACKET  */
+  case 50: /* Expression: NOT Expression  */
 #line 195 "parser.ypp"
-                                                     { (yyval.u_expr) = new ArrayAccess(new SymName((yyvsp[-3].u_base_charptr)), (yyvsp[-1].u_expr)); }
-#line 1846 "parser.cpp"
+                            {(yyval.u_expr) = new Not((yyvsp[0].u_expr));}
+#line 1836 "parser.cpp"
     break;
 
-  case 53: /* Expression: INT_LITERAL  */
+  case 51: /* Expression: MINUS Expression  */
 #line 196 "parser.ypp"
-                         { (yyval.u_expr) = new IntLit(new Primitive((yyvsp[0].u_base_int))); }
-#line 1852 "parser.cpp"
+                              {(yyval.u_expr) = new Uminus((yyvsp[0].u_expr));}
+#line 1842 "parser.cpp"
     break;
 
-  case 54: /* Expression: CHAR_LITERAL  */
+  case 52: /* Expression: IDENTIFIER  */
 #line 197 "parser.ypp"
-                          { (yyval.u_expr) = new CharLit(new Primitive((yyvsp[0].u_base_int))); }
-#line 1858 "parser.cpp"
+                        { (yyval.u_expr) = new Ident(new SymName((yyvsp[0].u_base_charptr))); }
+#line 1848 "parser.cpp"
     break;
 
-  case 55: /* Expression: BOOL_LITERAL  */
+  case 53: /* Expression: IDENTIFIER LBRACKET Expression RBRACKET  */
 #line 198 "parser.ypp"
-                          { (yyval.u_expr) = new BoolLit(new Primitive((yyvsp[0].u_base_int))); }
-#line 1864 "parser.cpp"
+                                                     { (yyval.u_expr) = new ArrayAccess(new SymName((yyvsp[-3].u_base_charptr)), (yyvsp[-1].u_expr)); }
+#line 1854 "parser.cpp"
     break;
 
-  case 56: /* Expression: DEREFERENCE Expression  */
+  case 54: /* Expression: INT_LITERAL  */
 #line 199 "parser.ypp"
-                                    { (yyval.u_expr) = new Deref((yyvsp[0].u_expr)); }
-#line 1870 "parser.cpp"
+                         { (yyval.u_expr) = new IntLit(new Primitive((yyvsp[0].u_base_int))); }
+#line 1860 "parser.cpp"
     break;
 
-  case 57: /* Expression: NULLTOKEN  */
+  case 55: /* Expression: CHAR_LITERAL  */
 #line 200 "parser.ypp"
-                       { (yyval.u_expr) = new NullLit(); }
-#line 1876 "parser.cpp"
+                          { (yyval.u_expr) = new CharLit(new Primitive((yyvsp[0].u_base_int))); }
+#line 1866 "parser.cpp"
     break;
 
-  case 58: /* Type: BOOLEAN  */
+  case 56: /* Expression: BOOL_LITERAL  */
+#line 201 "parser.ypp"
+                          { (yyval.u_expr) = new BoolLit(new Primitive((yyvsp[0].u_base_int))); }
+#line 1872 "parser.cpp"
+    break;
+
+  case 57: /* Expression: DEREFERENCE Expression  */
+#line 202 "parser.ypp"
+                                    { (yyval.u_expr) = new Deref((yyvsp[0].u_expr)); }
+#line 1878 "parser.cpp"
+    break;
+
+  case 58: /* Expression: NULLTOKEN  */
 #line 203 "parser.ypp"
-               { (yyval.u_type) = new TBoolean(); }
-#line 1882 "parser.cpp"
+                       { (yyval.u_expr) = new NullLit(); }
+#line 1884 "parser.cpp"
     break;
 
-  case 59: /* Type: CHAR  */
-#line 204 "parser.ypp"
-            { (yyval.u_type) = new TCharacter(); }
-#line 1888 "parser.cpp"
-    break;
-
-  case 60: /* Type: INTEGER  */
-#line 205 "parser.ypp"
-               { (yyval.u_type) = new TInteger(); }
-#line 1894 "parser.cpp"
-    break;
-
-  case 61: /* Type: INTPTR  */
+  case 59: /* Type: BOOLEAN  */
 #line 206 "parser.ypp"
-              { (yyval.u_type) = new TIntPtr(); }
-#line 1900 "parser.cpp"
+               { (yyval.u_type) = new TBoolean(); }
+#line 1890 "parser.cpp"
     break;
 
-  case 62: /* Type: CHARPTR  */
+  case 60: /* Type: CHAR  */
 #line 207 "parser.ypp"
-               { (yyval.u_type) = new TCharPtr(); }
-#line 1906 "parser.cpp"
+            { (yyval.u_type) = new TCharacter(); }
+#line 1896 "parser.cpp"
     break;
 
-  case 63: /* Block: LBRACE Declarations Statements RBRACE  */
+  case 61: /* Type: INTEGER  */
+#line 208 "parser.ypp"
+               { (yyval.u_type) = new TInteger(); }
+#line 1902 "parser.cpp"
+    break;
+
+  case 62: /* Type: INTPTR  */
+#line 209 "parser.ypp"
+              { (yyval.u_type) = new TIntPtr(); }
+#line 1908 "parser.cpp"
+    break;
+
+  case 63: /* Type: CHARPTR  */
 #line 210 "parser.ypp"
+               { (yyval.u_type) = new TCharPtr(); }
+#line 1914 "parser.cpp"
+    break;
+
+  case 64: /* Block: LBRACE Declarations Statements RBRACE  */
+#line 213 "parser.ypp"
                                               { (yyval.u_nested_block) = new Nested_blockImpl((yyvsp[-2].u_decl_list), (yyvsp[-1].u_stat_list)); }
-#line 1912 "parser.cpp"
+#line 1920 "parser.cpp"
     break;
 
 
-#line 1916 "parser.cpp"
+#line 1924 "parser.cpp"
 
       default: break;
     }
@@ -2136,7 +2144,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 213 "parser.ypp"
+#line 216 "parser.ypp"
 
 
 /** You shall not pass!

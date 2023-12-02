@@ -270,32 +270,53 @@ class Typecheck : public Visitor
     
     // Check that the return statement of a procedure has the appropriate type
     void check_proc(ProcImpl *p) {
-        Basetype procDeclaredReturnType = p->m_type->m_attribute.m_basetype;
+        // Basetype procDeclaredReturnType = p->m_type->m_attribute.m_basetype;
+        // Procedure_blockImpl* procBlock = dynamic_cast<Procedure_blockImpl*>(p->m_procedure_block);
+        // if (procBlock != nullptr && procBlock->m_return_stat != nullptr) {
+        //     Return* returnStmt = dynamic_cast<Return*>(procBlock->m_return_stat);
+        //     if (returnStmt != nullptr && returnStmt->m_expr != nullptr) {
+        //         Basetype returnExprType = evaluate_expr_type(returnStmt->m_expr);
 
-        Procedure_blockImpl* procBlock = dynamic_cast<Procedure_blockImpl*>(p->m_procedure_block);
-        if (procBlock != nullptr && procBlock->m_return_stat != nullptr) {
-            Return* returnStmt = dynamic_cast<Return*>(procBlock->m_return_stat);
-            if (returnStmt != nullptr && returnStmt->m_expr != nullptr) {
-                Basetype returnExprType = evaluate_expr_type(returnStmt->m_expr);
-                if(returnExprType == bt_ptr && (procDeclaredReturnType == bt_charptr || procDeclaredReturnType == bt_intptr)) {
-                    return;
-                } else if (procDeclaredReturnType != returnExprType) {
-                    t_error(ret_type_mismatch, p->m_attribute);
-                }
-            } 
+        //         // Check if return type is a pointer and the expression is null
+        //         if ((returnExprType == bt_ptr && (procDeclaredReturnType == bt_charptr || procDeclaredReturnType == bt_intptr)) ||
+        //             procDeclaredReturnType == returnExprType) {
+        //             return; // Valid return type
+        //         } else {
+        //             t_error(ret_type_mismatch, p->m_attribute);
+        //         }
+        //     } 
+        // }
+        // Basetype returnDef = p->m_type->m_attribute.m_basetype;
+        // Basetype returning = p->m_procedure_block->m_attribute.m_basetype;
+
+        if((p->m_type->m_attribute.m_basetype == bt_charptr || 
+            p->m_type->m_attribute.m_basetype == bt_intptr) && 
+            p->m_procedure_block->m_attribute.m_basetype == bt_ptr) {
+            return;
+        }
+
+        
+
+        if(p->m_type->m_attribute.m_basetype != p->m_procedure_block->m_attribute.m_basetype) {
+            this->t_error(ret_type_mismatch, p->m_attribute);
         }
         m_st->dump(stdout);
     }
 
     // Check that the declared return type is not an array
-    void check_return(Return *p)
-    {
-        Basetype returnType = evaluate_expr_type(p->m_expr);
+    void check_return(Return *p) {
+        // Basetype returnType = evaluate_expr_type(p->m_expr);
+        Basetype returnType = p->m_attribute.m_basetype;
+        // Check if the return type is null, which is allowed for pointer types
+        // if (returnType == bt_ptr) {
+        //     return; // Valid for pointer return types
+        // }
 
         if (returnType == bt_string) {
             t_error(call_type_mismatch, p->m_attribute);
         }
     }
+
 
     // Create a symbol for the procedure and check there is none already
     // existing
@@ -456,9 +477,7 @@ class Typecheck : public Visitor
         Basetype type1 = child1->m_attribute.m_basetype;
         Basetype type2 = child2->m_attribute.m_basetype;
 
-        if ((type1 == bt_intptr && type2 == bt_integer) ||  (type2 == bt_intptr && type1 == bt_integer)) {
-            parent->m_attribute.m_basetype = bt_intptr;
-        } else if (type1 == bt_integer && type2 == bt_integer) {
+        if (type1 == bt_integer && type2 == bt_integer) {
             parent->m_attribute.m_basetype = bt_integer;
         } else if ((type1 == bt_charptr && type2 == bt_integer) ||  (type2 == bt_charptr && type1 == bt_integer)) {
             parent->m_attribute.m_basetype = bt_charptr;
@@ -670,6 +689,8 @@ class Typecheck : public Visitor
         if (p->m_return_stat) {
             p->m_return_stat->accept(this);
         }
+
+        p->m_attribute.m_basetype = p->m_return_stat->m_attribute.m_basetype;
     }
 
     void visitDeclImpl(DeclImpl* p)
@@ -707,6 +728,7 @@ class Typecheck : public Visitor
     {
         p->visit_children(this);
         check_return(p);
+        p->m_attribute.m_basetype = p->m_expr->m_attribute.m_basetype;
     }
 
     void visitIfNoElse(IfNoElse* p)

@@ -90,6 +90,9 @@ Program : Procedure Procedures {
             $2->push_front($1); 
             $$ = new ProgramImpl($2);
             ast = $$;
+        } 
+        | { $$ = new ProgramImpl(new list<Proc_ptr>()); 
+            ast = $$; 
         }
         ;
 
