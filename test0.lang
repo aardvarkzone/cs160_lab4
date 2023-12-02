@@ -1,29 +1,18 @@
 
-procedure foo() return integer {
-	var a: integer;
-	while(true) {
-		var b : boolean;
-		a = 0;
-	}
-	return a; 
+procedure foo() return charptr {
+	var a: string[15];
+	var c: charptr; 
+	a[10] = 'a';
+	
+	
+	
+	return null; 
 }
 
-
-procedure Main() return integer {
-	procedure Main() return integer {
-		var x : integer;
-		x = Main();
-		return 0;
-	}
-	procedure foo(temp : charptr) return integer {
-		var x : integer;
-		var g : charptr;
-		g = null;
-		x = foo(null);
-		return 0;
-	}
-	var z : integer;
-	z = Main();
-	return 0;
+procedure Main() return char 
+{  
+    procedure Main() return char {
+        return 'b';
+    }
+    return 'a';
 }
-

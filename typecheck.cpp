@@ -278,6 +278,7 @@ class Typecheck : public Visitor
             if (returnStmt != nullptr && returnStmt->m_expr != nullptr) {
                 Basetype returnExprType = evaluate_expr_type(returnStmt->m_expr);
                 if(returnExprType == bt_ptr && (procDeclaredReturnType == bt_charptr || procDeclaredReturnType == bt_intptr)) {
+                    return;
                 } else if (procDeclaredReturnType != returnExprType) {
                     t_error(ret_type_mismatch, p->m_attribute);
                 }
@@ -366,8 +367,8 @@ class Typecheck : public Visitor
         //     t_error(incompat_assign, p->m_attribute);
         // }
         if (p->m_lhs->m_attribute.m_basetype == p->m_expr->m_attribute.m_basetype) {
-        return;  
-    }
+            return;  
+        }
 
         if (p->m_lhs->m_attribute.m_basetype == bt_string && p->m_expr->m_attribute.m_basetype == bt_char) {
             if(dynamic_cast<ArrayElement*>(p->m_lhs)) {
